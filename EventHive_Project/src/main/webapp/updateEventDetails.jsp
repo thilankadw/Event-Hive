@@ -55,7 +55,7 @@
 		  		<div>Enter New Title</div>
 		  		<form class="event-details-update-from">
 		  			<input type="text" class="event-update-input">
-		  			<input type="submit" value="Add New Title" class="update-event-details-submitbtn">
+		  			<input type="submit" value="Add New Title" class="update-event-details-submitbtn" name="addNewTitle">
 		  		</form>
 		  	</div>
 			<div class="event-details-parts">
@@ -68,7 +68,7 @@
 		  		<div>Enter New Organizer</div>
 		  		<form class="event-details-update-from">
 		  			<input type="text" class="event-update-input">
-		  			<input type="submit" value="Add New Organizer" class="update-event-details-submitbtn">
+		  			<input type="submit" value="Add New Organizer" class="update-event-details-submitbtn" name="addNewOrganization">
 		  		</form>
 		  	</div>
 			<div class="event-details-parts">
@@ -81,7 +81,7 @@
 		  		<div>Enter New Location</div>
 		  		<form class="event-details-update-from">
 		  			<input type="text" class="event-update-input">
-		  			<input type="submit" value="Add New Location" class="update-event-details-submitbtn">
+		  			<input type="submit" value="Add New Location" class="update-event-details-submitbtn" name="addNewLocation">
 		  		</form>
 		  	</div>
 			<div class="event-details-second-part">
@@ -101,7 +101,7 @@
 		  		<div>Enter New Starting Date</div>
 		  		<form class="event-details-update-from">
 		  			<input type="text" class="event-update-input">
-		  			<input type="submit" value="Add New Starting Date" class="update-event-details-submitbtn">
+		  			<input type="submit" value="Add New Starting Date" class="update-event-details-submitbtn" name="addNewstartingDate">
 		  		</form>
 		  	</div>
 		  	<!-- Event Update Pop up Forms -->
@@ -109,7 +109,7 @@
 		  		<div>Enter New Ending Date</div>
 		  		<form class="event-details-update-from">
 		  			<input type="text" class="event-update-input">
-		  			<input type="submit" value="Add New Ending Date" class="update-event-details-submitbtn">
+		  			<input type="submit" value="Add New Ending Date" class="update-event-details-submitbtn" name="addNewEndingDate">
 		  		</form>
 		  	</div>
 			<div class="event-details-second-part">
@@ -129,7 +129,7 @@
 		  		<div>Enter New Starting Time</div>
 		  		<form class="event-details-update-from">
 		  			<input type="text" class="event-update-input">
-		  			<input type="submit" value="Add New Starting Time" class="update-event-details-submitbtn">
+		  			<input type="submit" value="Add New Starting Time" class="update-event-details-submitbtn" name="addNewStartingTime">
 		  		</form>
 		  	</div>
 		  	<!-- Event Update Pop up Forms -->
@@ -137,7 +137,7 @@
 		  		<div>Enter New Ending Time</div>
 		  		<form class="event-details-update-from">
 		  			<input type="text" class="event-update-input">
-		  			<input type="submit" value="Add New Ending Time" class="update-event-details-submitbtn">
+		  			<input type="submit" value="Add New Ending Time" class="update-event-details-submitbtn" name="addNewEndingTime">
 		  		</form>
 		  	</div>
 			<div class="event-details-parts">
@@ -156,10 +156,6 @@
   		<a href="${pageContext.request.contextPath}/ticketBooking.jsp" style="display: none;" class="event-booking-link-main" style="<% if (true) { %>display: block;<% } else { %>display: none;<% } %>">Book Tickets</a>
   		
   	</div>
-  	
-  	
-  	
-  	
 
 	<%@ include file="footer.jsp" %>
 	

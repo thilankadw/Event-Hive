@@ -1,5 +1,21 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 
+<%@ page import="java.sql.DriverManager"%>
+<%@ page import="java.sql.ResultSet"%>
+<%@ page import="java.sql.Statement"%>
+<%@ page import="java.sql.Connection"%>
+
+<%@ page import="jakarta.servlet.http.HttpServlet"%>
+
+<%@ page import="com.eventHive.utils.dbConnection"%>
+
+
+<%
+	Connection connection = null;
+	Statement statement = null;
+	ResultSet resultSet = null; 
+%>
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -107,11 +123,12 @@
         
         	<div class="upcoming-events-center aaa">
         
-				<jsp:include page="eventCard.jsp">
-					<jsp:param name="eventName" value="Asia Cup 2023" />
-	    			<jsp:param name="eventDate" value="Wednesday, August 30, 2.30PM" />
-				</jsp:include>
-	        
+        		<c:forEach items="${events}" var="event">
+					<jsp:include page="eventCard.jsp">				
+						<jsp:param name="eventName" value="Asia Cup 2023" />
+		    			<jsp:param name="eventDate" value="Wednesday, August 30, 2.30PM" />
+					</jsp:include>
+	        	</c:forEach>
 	        	<jsp:include page="eventCard.jsp">
 					<jsp:param name="eventName" value="Asia Cup 2023" />
 	    			<jsp:param name="eventDate" value="Wednesday, August 30, 2.30PM" />

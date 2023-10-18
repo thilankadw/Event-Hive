@@ -17,7 +17,7 @@
 			        <button id="signupbtn">Sign up</button>
 			    <% }else { 
 			    %>
-			    	<a href="${pageContext.request.contextPath}/userprofile.jsp" id="logoutbtn"><img src="${pageContext.request.contextPath}/assets/header/profilepage.png" alt="Profile" id="profile-page-icon" /></a>
+			    	<a href="${pageContext.request.contextPath}/userProfile.jsp" id="logoutbtn"><img src="${pageContext.request.contextPath}/assets/header/profilepage.png" alt="Profile" id="profile-page-icon" /></a>
 			    <% }
 				//System.out.println(session.getAttribute("userSessionEmail"));
 			%>

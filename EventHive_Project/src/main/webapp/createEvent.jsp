@@ -150,7 +150,7 @@
 					<div class="event-detail-title">Event Description</div>
 					<textarea type="text" class="event-description-input" name="event_venue"></textarea>
 				</div>
-				<input type="submit" class="create-event-form-submit-btn" value="Create Event" name="cretae_event_btn">
+				<input type="submit" class="create-event-form-submit-btn" value="Create Event" name="createNewEvent">
 			</form>
 
 	</div>	

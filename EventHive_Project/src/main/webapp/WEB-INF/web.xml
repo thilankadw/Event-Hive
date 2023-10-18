@@ -25,10 +25,9 @@
     <servlet-name>eventController</servlet-name>
     <servlet-class>com.eventHive.controllers.eventController</servlet-class>
     <multipart-config>
-         <!--<location>\src\main\java\com\eventHive\assets</location> Temporary directory to store uploaded files -->
-        <max-file-size>5242880</max-file-size> <!-- Maximum file size (in bytes) -->
-        <max-request-size>10485760</max-request-size> <!-- Maximum request size (including file and other data) -->
-        <file-size-threshold>0</file-size-threshold> <!-- Size threshold for storing files on disk (0 means always in memory) -->
+      <max-file-size>5242880</max-file-size>
+      <max-request-size>10485760</max-request-size>
+      <file-size-threshold>0</file-size-threshold>
     </multipart-config>
   </servlet>
   <servlet-mapping>
@@ -74,5 +73,15 @@
   <servlet-mapping>
     <servlet-name>registerController</servlet-name>
     <url-pattern>/registerController</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>logoutController</display-name>
+    <servlet-name>logoutController</servlet-name>
+    <servlet-class>com.eventHive.controllers.logoutController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>logoutController</servlet-name>
+    <url-pattern>/logoutController</url-pattern>
   </servlet-mapping>
 </web-app>

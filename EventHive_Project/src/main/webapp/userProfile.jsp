@@ -54,36 +54,6 @@
 				<div class="userprofile-events-container">
 					<div class="userprofile-events-title">Scheduled Events</div>
 					<div>
-						<div class="userprofile-event">
-							<a href="${pageContext.request.contextPath}/updateEventDetails.jsp">
-								<img
-	                				src="${pageContext.request.contextPath}/assets/index/eventimage.png"
-					                alt=""
-					                class="upcoming-events-event-image"
-	              				/>
-	              				<div class="overlay">
-		              				<div class="event-details">
-		              					<div>Asia Cup 2023</div>			
-		              				</div>
-	              				</div>
-	              			</a>	
-						</div>
-						
-						<div class="userprofile-event">
-							<a href="${pageContext.request.contextPath}/updateEventDetails.jsp">
-								<img
-	                				src="${pageContext.request.contextPath}/assets/index/eventimage.png"
-					                alt=""
-					                class="upcoming-events-event-image"
-	              				/>
-	              				<div class="overlay">
-		              				<div class="event-details">
-		              					<div>Asia Cup 2023</div>
-		              				</div>
-	              				</div>
-	              				
-	              			</a>
-						</div>
 						
 						<div class="userprofile-event">
 							<a href="${pageContext.request.contextPath}/updateEventDetails.jsp">
@@ -122,85 +92,6 @@
 	              			</a>
 						</div>
 						
-						<div class="userprofile-event">
-							<a href="${pageContext.request.contextPath}/updateEventDetails.jsp">
-								<img
-	                				src="${pageContext.request.contextPath}/assets/index/eventimage.png"
-					                alt=""
-					                class="upcoming-events-event-image"
-	              				/>
-	              				<div class="overlay">
-		              				<div class="event-details">
-		              					<div>Asia Cup 2023</div>
-		              				</div>
-	              				</div>
-	              				
-	              			</a>
-						</div>
-						
-						<div class="userprofile-event">
-							<a href="${pageContext.request.contextPath}/updateEventDetails.jsp">
-								<img
-	                				src="${pageContext.request.contextPath}/assets/index/eventimage.png"
-					                alt=""
-					                class="upcoming-events-event-image"
-	              				/>
-	              				<div class="overlay">
-		              				<div class="event-details">
-		              					<div>Asia Cup 2023</div>
-		              				</div>
-	              				</div>
-	              				
-	              			</a>
-						</div>
-					
-						<div class="userprofile-event">
-							<a href="${pageContext.request.contextPath}/updateEventDetails.jsp">
-								<img
-	                				src="${pageContext.request.contextPath}/assets/index/eventimage.png"
-					                alt=""
-					                class="upcoming-events-event-image"
-	              				/>
-	              				<div class="overlay">
-		              				<div class="event-details">
-		              					<div>Asia Cup 2023</div>
-		              				</div>
-	              				</div>
-	              				
-	              			</a>
-						</div>
-						
-						<div class="userprofile-event">
-							<a href="${pageContext.request.contextPath}/updateEventDetails.jsp">
-								<img
-	                				src="${pageContext.request.contextPath}/assets/index/eventimage.png"
-					                alt=""
-					                class="upcoming-events-event-image"
-	              				/>
-	              				<div class="overlay">
-		              				<div class="event-details">
-		              					<div>Asia Cup 2023</div>
-		              				</div>
-	              				</div>
-	              				
-	              			</a>
-						</div>
-						
-						<div class="userprofile-event">
-							<a href="${pageContext.request.contextPath}/updateEventDetails.jsp">
-								<img
-	                				src="${pageContext.request.contextPath}/assets/index/eventimage.png"
-					                alt=""
-					                class="upcoming-events-event-image"
-	              				/>
-	              				<div class="overlay">
-		              				<div class="event-details">
-		              					<div>Asia Cup 2023</div>
-		              				</div>
-	              				</div>
-	              				
-	              			</a>
-						</div>
 					</div>
 				</div>
 				
@@ -215,44 +106,7 @@
 				<div class="userprofile-booking-container">
 				
 					<div class="userprofile-events-title">Your Reservations</div>
-					<div>
-						<div class="userprofile-event">
-							<a>
-								<img
-	                				src="${pageContext.request.contextPath}/assets/index/eventimage.png"
-					                alt=""
-					                class="upcoming-events-event-image"
-	              				/>
-	              				<div class="overlay">
-		              				<div class="event-boking-details">
-		              					<div>Asia Cup 2023</div>
-		              					<div>Event Date</div>
-		              					<div>Location</div>
-		              					<div>Code</div>
-		              				</div>
-	              				</div>
-	              				
-	              			</a>
-						</div>
-						
-						<div class="userprofile-event">
-							<a>
-								<img
-	                				src="${pageContext.request.contextPath}/assets/index/eventimage.png"
-					                alt=""
-					                class="upcoming-events-event-image"
-	              				/>
-	              				<div class="overlay">
-		              				<div class="event-boking-details">
-		              					<div>Asia Cup 2023</div>
-		              					<div>Event Date</div>
-		              					<div>Location</div>
-		              					<div>Code</div>
-		              				</div>
-	              				</div>
-	              				
-	              			</a>
-						</div>
+					<div>	
 						
 						<div class="userprofile-event">
 							<a>
@@ -274,20 +128,6 @@
 						</div>					
 					</div>
 				</div>
-				
-				<div class="">
-					<div>You may also like</div>
-					
-					<div class="">
-        
-						<!--<jsp:include page="eventcard.jsp">
-							<jsp:param name="eventName" value="Asia Cup 2023" />
-			    			<jsp:param name="eventDate" value="Wednesday, August 30, 2.30PM" />
-						</jsp:include>-->
-			        
-		          	</div>
-				</div>
-			
 			</div>
 			
 			
