@@ -1,13 +1,33 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%
-    //if (session.getAttribute("userSessionEmail") == null) {
+    //if (session.getAttribute("userSessionEmail") == null || session.getAttribute("userSessionId") == null) {
         //response.sendRedirect("index.jsp");
     //}
 %>
+
+<%@ page import="java.sql.DriverManager"%>
+<%@ page import="java.sql.ResultSet"%>
+<%@ page import="java.sql.Statement"%>
+<%@ page import="java.sql.Connection"%>
+<%@ page import="java.sql.PreparedStatement"%>
+
+<%@ page import="jakarta.servlet.http.HttpServlet"%>
+
+<%@ page import="com.eventHive.utils.dbConnection"%>
+<%
+	Connection connection = null;
+	Statement statement = null;
+	ResultSet resultSet = null; 
+	PreparedStatement preparedStatement = null;
+	
+	String eventId = request.getParameter("eventId");						
+	int userId = (Integer) session.getAttribute("userSessionId");
+%>
+
 <!DOCTYPE html>
 <html>
   <head>
-    <title>EvenetHive</title>
+    <title>EvenetHive -  User Profile</title>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/styles.css" />
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/header.css" />
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/footer.css" />
@@ -23,7 +43,7 @@
 			<button id="dashboardBtn">Dashboard</button>
 			<button id="eventBtn">Events</button>
 			<button id="bookingsBtn">Bookings</button>
-			<button id="profileBtn">Profile</button>
+			<button id="profileBtn">Updates</button>
 		</div>
 		<div class="user-profile-content">
 		
@@ -33,14 +53,51 @@
 				</div>
 				
 				<div class="dashboard-showcase">
+					<% 	
+						  	connection = dbConnection.getConnection();
+						    statement = connection.createStatement();
+						    String query1 = "select count(ticketId) from tickets t, events e where t.eventId=e.eventId and e.userId= ?";
+						    preparedStatement = connection.prepareStatement(query1);
+						    preparedStatement.setInt(1, userId);
+						    resultSet = preparedStatement.executeQuery();
+					  	
+						    while (resultSet.next()) {	
+					%>
 					<div class="dashboard-showcase-element">
-						<div>10</div>
+						<div><%= resultSet.getString(1) %></div>
 						<div>Ticketes Sold</div>
 					</div>
+					<% } %>	
+					<% 	
+						  	connection = dbConnection.getConnection();
+						    statement = connection.createStatement();
+						    String query2 = "select sum(totalAmount) from tickets t, events e where t.eventId=e.eventId and e.userId= ?";
+						    preparedStatement = connection.prepareStatement(query2);
+						    preparedStatement.setInt(1, userId);
+						    resultSet = preparedStatement.executeQuery();
+					  	
+						    while (resultSet.next()) {	
+					%>
 					<div class="dashboard-showcase-element">
-						<div>100</div>
-						<div>Revenue (USD)</div></div>
-					<div class="dashboard-showcase-element-2"></div>
+						<div><%= resultSet.getString(1) %></div>
+						<div>Revenue (LKR)</div>
+					</div>
+					<% } %>
+					<% 	
+						  	connection = dbConnection.getConnection();
+						    statement = connection.createStatement();
+						    String query7 = "select count(noOfTickets) from tickets t, events e where t.eventId=e.eventId and e.userId= ?";
+						    preparedStatement = connection.prepareStatement(query7);
+						    preparedStatement.setInt(1, userId);
+						    resultSet = preparedStatement.executeQuery();
+					  	
+						    while (resultSet.next()) {	
+						%>
+						<div class="dashboard-showcase-element">
+							<div><%= resultSet.getString(1) %></div>
+							<div>Total Participants</div>
+						</div>
+					<% } %>
 				</div>
 				
 			</div>
@@ -52,49 +109,41 @@
 				</div>
 				
 				<div class="userprofile-events-container">
-					<div class="userprofile-events-title">Scheduled Events</div>
+					<div class="userprofile-events-title">Manage Events</div>
 					<div>
-						
+					
+						<% 	
+						  	connection = dbConnection.getConnection();
+						    statement = connection.createStatement();
+						    String sql = "select * from events where userId = ?";
+						    preparedStatement = connection.prepareStatement(sql);
+						    preparedStatement.setInt(1, userId);
+						    resultSet = preparedStatement.executeQuery();
+					  		
+						    while (resultSet.next()) {	
+					  	%>
+					
 						<div class="userprofile-event">
-							<a href="${pageContext.request.contextPath}/updateEventDetails.jsp">
+							<a href="${pageContext.request.contextPath}/updateEventDetails.jsp?eventId=<%= resultSet.getString(1) %>">
 								<img
-	                				src="${pageContext.request.contextPath}/assets/index/eventimage.png"
+	                				src="${pageContext.request.contextPath}/assets/eventBanners/<%= resultSet.getString(20) %>"
 					                alt=""
 					                class="upcoming-events-event-image"
 	              				/>
 	              				<div class="overlay">
 		              				<div class="event-details">
-		              					<div>Asia Cup 2023</div>
+		              					<div><%= resultSet.getString(2) %></div>
+		              					<form action="eventController" method="post" enctype="multipart/form-data">
+		              						<input type="hidden" value="<%= resultSet.getString(1) %>" name="event_id">
+		              						<input type="submit" value="Remove Event" name="remove_event-btn" class="admin_remove_event_btn">
+		              					</form>			
 		              				</div>
 	              				</div>
-	              				
-	              			</a>
-						</div>
+	              			</a>	
+						</div>		
+						<% } %>								
 					</div>
 				</div>
-				
-				<div class="userprofile-events-container">
-					<div class="userprofile-events-title">Completed Events</div>
-					<div>
-						<div class="userprofile-event">
-							<a href="${pageContext.request.contextPath}/updateEventDetails.jsp">
-								<img
-	                				src="${pageContext.request.contextPath}/assets/index/eventimage.png"
-					                alt=""
-					                class="upcoming-events-event-image"
-	              				/>
-	              				<div class="overlay">
-		              				<div class="event-details">
-		              					<div>Asia Cup 2023</div>
-		              				</div>
-	              				</div>
-	              				
-	              			</a>
-						</div>
-						
-					</div>
-				</div>
-				
 			</div>
 			
 			
@@ -105,27 +154,32 @@
 				
 				<div class="userprofile-booking-container">
 				
-					<div class="userprofile-events-title">Your Reservations</div>
-					<div>	
-						
-						<div class="userprofile-event">
-							<a>
-								<img
-	                				src="${pageContext.request.contextPath}/assets/index/eventimage.png"
-					                alt=""
-					                class="upcoming-events-event-image"
-	              				/>
-	              				<div class="overlay">
-		              				<div class="event-boking-details">
-		              					<div>Asia Cup 2023</div>
-		              					<div>Event Date</div>
-		              					<div>Location</div>
-		              					<div>Code</div>
-		              				</div>
-	              				</div>
-	              				
-	              			</a>
-						</div>					
+					<div class="userprofile-events-title">Manage Tickets</div>
+					<div>					
+						<div class="admin-ticket-dashboard-showcase">
+							<%
+								connection = dbConnection.getConnection();
+							    statement = connection.createStatement();
+							    String query = "select * from tickets  where userId = ?";
+							    preparedStatement = connection.prepareStatement(query);
+							    preparedStatement.setInt(1, userId);
+							    resultSet = preparedStatement.executeQuery();
+						  	
+							    while (resultSet.next()) {	
+							%>
+							<div class="dashboard-showcase-element">
+								<form action="ticketController" method="post">
+									<input type="text" class="ticketdetails" name="ticketId" value="<%= resultSet.getString(1) %>" readonly>
+									<input type="text" class="ticketdetails" name="" value=" User ID - <%= resultSet.getString(2) %>" readonly>
+									<input type="text" class="ticketdetails" name="" value=" Event ID - <%= resultSet.getString(3) %>" readonly>
+									<input type="text" class="ticketdetails" name="" value=" No of Tickets - <%= resultSet.getString(4) %>" readonly>
+									<input type="text" class="ticketdetails" name="" value=" Amount - <%= resultSet.getString(5) %>" readonly>
+									<input type="text" class="ticketdetails" name="" value=" Payment Type - <%= resultSet.getString(6) %>" readonly>
+									<input type="submit" value="Remove Tickets" name="remove_ticket-btn">
+								</form>
+							</div>	
+							<% } %>					
+						</div>		
 					</div>
 				</div>
 			</div>
@@ -137,28 +191,36 @@
 				</div>
 				
 				<div class="userprofile-logout">
-					<form action="/logoutController"  method="post">
+					<form action="logoutController"  method="post">
 						<input type="submit" value="Log Out">
 					</form>
 				</div>
-				
+					
 				<div class="userprofile-events-container">
-					<div class="userprofile-portfolio-title">Portfolio</div>
-					<div class="dashboard-showcase">
-						<div class="dashboard-showcase-element">
-							<div>10</div>
-							<div>Events</div>
+				
+					<div class="admin-managge-users-container">
+					<div class="userprofile-portfolio-title">Reset Password</div>					
+						<div>
+							<form action="adminController" method="post" class="adminadduers-form">
+								<div class="admin-addusers-inputs" id="admin_add_user_name">
+									<div class="admin-addusers-inputs-label">Current Password</div>		
+									<input type="text" name="cur_password" id="cur_password" class="admin-section-add-user-input-fields">						
+								</div>
+								<div class="admin-addusers-inputs">
+									<div class="admin-addusers-inputs-label">New Password</div>		
+									<input type="text" name="new_password" id="new_password" class="admin-section-add-user-input-fields">						
+								</div>
+								<div class="admin-addusers-inputs">
+									<div class="admin-addusers-inputs-label">Confirm New Password</div>		
+									<input type="text" name="new_password_confirm" id="new_password_confirm" class="admin-section-add-user-input-fields">						
+								</div>
+								<div class="admin-addusers-inputs">
+									<input type="submit" name="admin-add-user-btn" value="Reset Password" class="admin-section-adduser-submitbtn">				
+								</div>
+							</form>
 						</div>
-						<div class="dashboard-showcase-element">
-							<div>100</div>
-							<div>Total Participants</div>
-						</div>
-						<div class="dashboard-showcase-element">
-							<div>100</div>
-							<div>Revenue (USD)</div>
-						</div>
-						<a href="#" class="profileto-createevent">Create Events</a>
-					</div>
+				</div>
+
 				</div>
 				
 				

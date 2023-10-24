@@ -112,3 +112,15 @@
 	font-family: var(--primary-font);
 	outline: none;
 }
+.all-events-container{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.upcoming-events-center{
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+	width: 100px; 
+}

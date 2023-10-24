@@ -7,18 +7,20 @@ import jakarta.servlet.http.Part;
 
 public class eventUtils {
 	
-	public static String saveImageToFolder(Part part, String fileName) throws IOException {
+	public static boolean saveImageToFolder(Part part, String fileName) throws IOException {
 		
+		boolean isSuccess = false;
         String path = "E:/Projects/Java Web Applications/EventHive_Project/src/main/webapp/assets/eventBanners/" + fileName;
         File file = new File(path);
         
         try {
             part.write(path);
+            isSuccess = true;
         } catch (IOException e) {
             e.printStackTrace();
         }
         
-        return path;
+        return isSuccess;
     }
 	
 	

@@ -24,9 +24,15 @@ public class loginController extends HttpServlet {
 		boolean validLogin = userUtils.validateUser(userPassword, userDao.getUserPassword(userEmail));	
 		
 		if(validLogin) {
+			int userId = userDao.getUserIdFromEmail(userEmail);
+			String userRole = userDao.getUserRole(userEmail);
+			
 			HttpSession session = request.getSession(true);
 			session.setAttribute("userSessionEmail", userEmail);
-			
+			session.setAttribute("userSessionId", userId);
+			session.setAttribute("userSessionRole", userRole);
+			int userID = (int) session.getAttribute("userSessionId");
+			System.out.println("userID : "+session.getAttribute("userSessionRole"));
 			RequestDispatcher dis = request.getRequestDispatcher("createEvent.jsp");
 			dis.forward(request, response);
 		}else {

@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%
-    //if (session.getAttribute("userSessionEmail") == null) {
-        //response.sendRedirect("index.jsp");
-    //}
+    if (session.getAttribute("userSessionEmail") == null || session.getAttribute("userSessionId") == null) {
+       	response.sendRedirect("index.jsp");
+    }
 %>
 <!DOCTYPE html>
 <html>
@@ -34,7 +34,7 @@
 				</div>
 				<div class="event-details">
 					<div class="event-detail-title">District</div>
-					<select class="event-detail-category-input">
+					<select class="event-detail-category-input" name="event_district">
 						<% String[] districts ={"Ampara", "Anuradhapura", "Badulla", "Batticaloa", "Colombo",
 										"Galle", "Gampaha", "Hambantota", "Jaffna", "Kalutara",
 										"Kandy", "Kegalle", "Kilinochchi", "Kurunegala", "Mannar",
@@ -47,7 +47,8 @@
 				</div>
 				<div class="event-details">
 					<div class="event-detail-title">Event Category</div>
-					<select class="event-detail-category-input">
+					<select class="event-detail-category-input" name="event_category">
+						<option>Sport Event</option>
 						<option>Exhibition</option>
 						<option>Award Ceremony</option>
 						<option>Musical Event</option>
@@ -67,11 +68,11 @@
 				<div class="event-time-details">
 					<div class="event-time-inputs">
 						<div class="event-detail-title">Start date</div>
-						<input type="date" class="event-time-input" name="event_start_time">
+						<input type="date" class="event-time-input" name="event_start_date">
 					</div>
 					<div class="event-time-inputs">
 						<div class="event-detail-title">End date</div>
-						<input type="date" class="event-time-input" name="event_end_time">
+						<input type="date" class="event-time-input" name="event_end_date">
 					</div>
 				</div>
 				
@@ -79,13 +80,13 @@
 					<div class="event-detail-type">Event Type</div>
 					<div class="event-type">
 						<div class="event-type-input">
-							Online<input type="radio" class="event-type-input" name="event_type">
+							Online<input type="radio" class="event-type-input" value="online" name="event_type">
 						</div>
 						<div class="event-type-input">
-							Physical<input type="radio" class="event-type-input" name="event_type">
+							Physical<input type="radio" class="event-type-input" value="physical" name="event_type">
 						</div>
 						<div class="event-type-input">
-							Hybrid<input type="radio" class="event-type-input" name="event_type">
+							Hybrid<input type="radio" class="event-type-input" value="hybrid" name="event_type">
 						</div>
 					</div>	
 				</div>
@@ -104,15 +105,15 @@
 				<div class="event-time-details" id="packages-prices">
 					<div class="event-time-inputs">
 						<div class="event-detail-title">Vip Package</div>
-						<input type="text" class="event-ticket-price-input" name="event_start_time">
+						<input type="text" class="event-ticket-price-input" name="vip_package_price">
 					</div>
 					<div class="event-time-inputs">
 						<div class="event-detail-title">Premium Package</div>
-						<input type="text" class="event-ticket-price-input" name="event_end_time">
+						<input type="text" class="event-ticket-price-input" name="premium_package_price">
 					</div>
 					<div class="event-time-inputs">
 						<div class="event-detail-title">Standard Package</div>
-						<input type="text" class="event-ticket-price-input" name="event_end_time">
+						<input type="text" class="event-ticket-price-input" name="standard_package_price">
 					</div>
 				</div>
 				
@@ -120,7 +121,7 @@
 					<div class="event-detail-type">Payment Refunds</div>
 					<div class="event-type">
 						<div class="event-type-input">
-							Refund Available<input type="checkbox" class="event-type-input" name="event_type">
+							Refund Available<input type="checkbox" class="event-type-input" value="yes" name="event_refund_available">
 						</div>
 					</div>	
 				</div>
@@ -138,7 +139,7 @@
 				<div class="event-type-details" id="limit-attendance" >
 					<div class="event-details">
 						<div class="event-detail-title">Maximum Participants (optional)</div>
-						<input type="text" class="event-detail-input" name="event_venue">
+						<input type="text" class="event-detail-input" name="max_participants">
 					</div>
 				</div>
 				<div class="event-description-title">Event Description</div>
@@ -148,7 +149,7 @@
 				</div>
 				<div class="event-details">
 					<div class="event-detail-title">Event Description</div>
-					<textarea type="text" class="event-description-input" name="event_venue"></textarea>
+					<textarea type="text" class="event-description-input" name="event_description"></textarea>
 				</div>
 				<input type="submit" class="create-event-form-submit-btn" value="Create Event" name="createNewEvent">
 			</form>
@@ -159,6 +160,7 @@
 	<%@ include file="footer.jsp" %>
     
 	<!--<script src="${pageContext.request.contextPath}/scripts/createEevent.js"></script>-->
+	<script src="${pageContext.request.contextPath}/scripts/header.js"></script>
 	
 	<script>
 		/*

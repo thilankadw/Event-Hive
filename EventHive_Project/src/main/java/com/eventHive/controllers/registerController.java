@@ -26,7 +26,7 @@ public class registerController extends HttpServlet {
 		
 		try {
 			if(!(userDao.checkEmailExist(userEmail))) {
-				if(userDao.createUserRecord(userName, userEmail, userPassword)) {
+				if(userDao.createUserRecord(userDao.getNextID(), userName, userEmail, userPassword)) {
 					HttpSession session = request.getSession(true);
 					session.setAttribute("userSessionEmail", userEmail);
 					

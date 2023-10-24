@@ -1,19 +1,27 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
 <%@ page import="java.sql.DriverManager"%>
 <%@ page import="java.sql.ResultSet"%>
 <%@ page import="java.sql.Statement"%>
 <%@ page import="java.sql.Connection"%>
+<%@ page import="java.sql.PreparedStatement"%>
 
 <%@ page import="jakarta.servlet.http.HttpServlet"%>
 
 <%@ page import="com.eventHive.utils.dbConnection"%>
 
+<%@ page import="javax.servlet.http.HttpSession" %>
 
 <%
 	Connection connection = null;
 	Statement statement = null;
 	ResultSet resultSet = null; 
+	PreparedStatement preparedStatement = null;
+	
+	Integer userId = (Integer) session.getAttribute("userSessionId");
+
 %>
 
 <!DOCTYPE html>
@@ -40,18 +48,19 @@
       </div>
 
       <div class="index-event-register">
-        <form class="index-event-register-form" action="#" method="post">
+        <form class="index-event-register-form" action="eventController" method="get">
           <div class="index-form-inputs">
             <div class="index-form-label">Looking for</div>
-            <select>
-              <option value="Wedding">Wedding</option>
-              <option value="Exhibition">Exhibition</option>
-              <option value="Meet up">Meet up</option>
-              <option value="Award Ceremony">Award Ceremony</option>
+            <select name="event_category">
+              	<option>Sport Event</option>
+				<option>Exhibition</option>
+				<option>Award Ceremony</option>
+				<option>Musical Event</option>
+				<option>Comedy Shows</option>
             </select>
           </div>
           <div class="index-form-inputs">
-            <div class="index-form-label">Location</div>
+            <div class="index-form-label">District</div>
             <select>
               <% String[] districts ={"Ampara", "Anuradhapura", "Badulla", "Batticaloa", "Colombo",
 										"Galle", "Gampaha", "Hambantota", "Jaffna", "Kalutara",
@@ -70,9 +79,7 @@
               <option value="physical">Physical</option>
               <option value="hybrid">Hybrid</option>
             </select>
-          </div>
-          
-          
+          </div>   
           <input
             type="submit"
             class="index-event-register-form-submit"
@@ -122,40 +129,42 @@
         <div class="upcoming-events">
         
         	<div class="upcoming-events-center aaa">
-        
-        		<c:forEach items="${events}" var="event">
-					<jsp:include page="eventCard.jsp">				
-						<jsp:param name="eventName" value="Asia Cup 2023" />
-		    			<jsp:param name="eventDate" value="Wednesday, August 30, 2.30PM" />
+        		<%
+					try {
+					    connection = dbConnection.getConnection();
+					    statement = connection.createStatement();
+					    String sql = "select * from events where userId != ?";
+					    preparedStatement = connection.prepareStatement(sql);
+					    preparedStatement.setInt(1, userId);
+					    resultSet = preparedStatement.executeQuery();
+					    while (resultSet.next()) {							
+					    	String eventTypeValue = "Happens PHYSICALLY!!!";
+							
+							if (resultSet.getString(11).equals("physical")) {
+								eventTypeValue = "Happens PHYSICALLY!!!";
+						    } else if (resultSet.getString(11).equals("online")) {
+						    	eventTypeValue = "ONLINE EVENT - Attend Anywhere!!!";
+						    } 		
+							    
+				%>
+					<jsp:include page="eventCard.jsp">
+						<jsp:param name="eventId" value="<%= resultSet.getString(1) %>" />
+						<jsp:param name="eventImage" value="<%= resultSet.getString(20) %>" />
+					    <jsp:param name="eventName" value="<%= resultSet.getString(2) %>" />
+					    <jsp:param name="eventDate" value="<%= resultSet.getString(9) %>" />
+						
+					    <jsp:param name="eventType" value="<%= eventTypeValue %>" />
 					</jsp:include>
-	        	</c:forEach>
-	        	<jsp:include page="eventCard.jsp">
-					<jsp:param name="eventName" value="Asia Cup 2023" />
-	    			<jsp:param name="eventDate" value="Wednesday, August 30, 2.30PM" />
-				</jsp:include>
-				
-				<jsp:include page="eventCard.jsp">
-					<jsp:param name="eventName" value="Asia Cup 2023" />
-	    			<jsp:param name="eventDate" value="Wednesday, August 30, 2.30PM" />
-				</jsp:include>
-				
-				<jsp:include page="eventCard.jsp">
-					<jsp:param name="eventName" value="Asia Cup 2023" />
-	    			<jsp:param name="eventDate" value="Wednesday, August 30, 2.30PM" />
-				</jsp:include>
-				
-				<jsp:include page="eventCard.jsp">
-					<jsp:param name="eventName" value="Asia Cup 2023" />
-	    			<jsp:param name="eventDate" value="Wednesday, August 30, 2.30PM" />
-				</jsp:include>
-				
-				<jsp:include page="eventCard.jsp">
-					<jsp:param name="eventName" value="Asia Cup 2023" />
-	    			<jsp:param name="eventDate" value="Wednesday, August 30, 2.30PM" />
-				</jsp:include>
+
+	        	<%
+						}
+						connection.close();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				%>
           
-          	</div>
-          
+          	</div>        
         </div>
       </div>
 
@@ -164,7 +173,7 @@
         <div class="index-create-event-text">
           <div>Make your own Event</div>
           <div>
-            Lorem ipsum dolor sit amet, consectetur<br />adipiscing elit.
+            Create and mange your all events<br />at one place
           </div>
           <a href="createEvent.jsp">Create Events</a>
         </div>
@@ -182,39 +191,41 @@
         <div class="upcoming-events">
         
         	<div class="upcoming-events-center aaa">
-        
-				<jsp:include page="eventCard.jsp">
-					<jsp:param name="eventName" value="Asia Cup 2023" />
-	    			<jsp:param name="eventDate" value="Wednesday, August 30, 2.30PM" />
-				</jsp:include>
-	        
-	        	<jsp:include page="eventCard.jsp">
-					<jsp:param name="eventName" value="Asia Cup 2023" />
-	    			<jsp:param name="eventDate" value="Wednesday, August 30, 2.30PM" />
-				</jsp:include>
-				
-				<jsp:include page="eventCard.jsp">
-					<jsp:param name="eventName" value="Asia Cup 2023" />
-	    			<jsp:param name="eventDate" value="Wednesday, August 30, 2.30PM" />
-				</jsp:include>
-				
-				<jsp:include page="eventCard.jsp">
-					<jsp:param name="eventName" value="Asia Cup 2023" />
-	    			<jsp:param name="eventDate" value="Wednesday, August 30, 2.30PM" />
-				</jsp:include>
-				
-				<jsp:include page="eventCard.jsp">
-					<jsp:param name="eventName" value="Asia Cup 2023" />
-	    			<jsp:param name="eventDate" value="Wednesday, August 30, 2.30PM" />
-				</jsp:include>
-				
-				<jsp:include page="eventCard.jsp">
-					<jsp:param name="eventName" value="Asia Cup 2023" />
-	    			<jsp:param name="eventDate" value="Wednesday, August 30, 2.30PM" />
-				</jsp:include>
+        		<%
+					try {
+					    connection = dbConnection.getConnection();
+					    statement = connection.createStatement();
+					    String sql = "select * from events";
+					    preparedStatement = connection.prepareStatement(sql);
+					    resultSet = preparedStatement.executeQuery();
+					    while (resultSet.next()) {							
+					    	String eventTypeValue = "Happens PHYSICALLY!!!";
+							
+							if (resultSet.getString(11).equals("physical")) {
+								eventTypeValue = "Happens PHYSICALLY!!!";
+						    } else if (resultSet.getString(11).equals("online")) {
+						    	eventTypeValue = "ONLINE EVENT - Attend Anywhere!!!";
+						    } 		
+							    
+				%>
+					<jsp:include page="eventCard.jsp">
+						<jsp:param name="eventId" value="<%= resultSet.getString(1) %>" />
+						<jsp:param name="eventImage" value="<%= resultSet.getString(20) %>" />
+					    <jsp:param name="eventName" value="<%= resultSet.getString(2) %>" />
+					    <jsp:param name="eventDate" value="<%= resultSet.getString(9) %>" />
+						
+					    <jsp:param name="eventType" value="<%= eventTypeValue %>" />
+					</jsp:include>
+
+	        	<%
+						}
+						connection.close();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				%>
           
-          	</div>
-          
+          	</div>        
         </div>
       </div>
          

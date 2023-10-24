@@ -5,7 +5,7 @@ public class eventModel {
 	private int eventId;
 	private String eventName;
 	private String eventOrganization;
-	private String eventVenue;
+	private String eventLocation;
 	private String eventDistrict;
 	private String eventCategory;
 	private String eventStartTime;
@@ -13,7 +13,7 @@ public class eventModel {
 	private String eventStartDate;
 	private String eventEndDate;
 	private String eventType;
-	private String eventPaymentType;
+	private String eventPayments;
 	private String vipPackagePrice;
 	private String premiumPackagePrice;
 	private String standardPackagePrice;
@@ -22,17 +22,17 @@ public class eventModel {
 	private String maxParticipants;
 	private String eventDescription;
 	private String eventImage;
+	private int userID;
 	
-	public eventModel(int eventId, String eventName, String eventOrganization, String eventVenue, String eventDistrict,
-			String eventCategory, String eventStartTime, String eventEndTime, String eventStartDate,
-			String eventEndDate, String eventType, String eventPaymentType, String vipPackagePrice,
-			String premiumPackagePrice, String standardPackagePrice, String eventRefundAvailable,
-			String eventVisibility, String maxParticipants, String eventDescription, String eventImage) {
+	public eventModel(int eventID, String eventName, String eventOrganization, String eventLocation, String eventDistrict, String eventCategory, 
+			String eventStartTime, String eventEndTime, String eventStartDate, String eventEndDate, String eventType, String eventPayments, 
+			String vipPackagePrice, String premiumPackagePrice, String standardPackagePrice, String eventRefundAvailable, String eventVisibility,
+			String maxParticipants, String eventDescription,  String eventImage, int userID) {
 		super();
 		this.eventId = eventId;
 		this.eventName = eventName;
 		this.eventOrganization = eventOrganization;
-		this.eventVenue = eventVenue;
+		this.eventLocation = eventLocation;
 		this.eventDistrict = eventDistrict;
 		this.eventCategory = eventCategory;
 		this.eventStartTime = eventStartTime;
@@ -40,15 +40,16 @@ public class eventModel {
 		this.eventStartDate = eventStartDate;
 		this.eventEndDate = eventEndDate;
 		this.eventType = eventType;
-		this.eventPaymentType = eventPaymentType;
+		this.eventPayments = eventPayments;
 		this.vipPackagePrice = vipPackagePrice;
-		this.premiumPackagePrice = premiumPackagePrice;
+		this.premiumPackagePrice = premiumPackagePrice; 
 		this.standardPackagePrice = standardPackagePrice;
 		this.eventRefundAvailable = eventRefundAvailable;
 		this.eventVisibility = eventVisibility;
 		this.maxParticipants = maxParticipants;
 		this.eventDescription = eventDescription;
 		this.eventImage = eventImage;
+		this.userID = userID;
 	}
 
 	public int getEventId() {
@@ -76,11 +77,11 @@ public class eventModel {
 	}
 
 	public String getEventVenue() {
-		return eventVenue;
+		return eventLocation;
 	}
 
 	public void setEventVenue(String eventVenue) {
-		this.eventVenue = eventVenue;
+		this.eventLocation = eventVenue;
 	}
 
 	public String getEventDistrict() {
@@ -140,11 +141,11 @@ public class eventModel {
 	}
 
 	public String getEventPaymentType() {
-		return eventPaymentType;
+		return eventPayments;
 	}
 
 	public void setEventPaymentType(String eventPaymentType) {
-		this.eventPaymentType = eventPaymentType;
+		this.eventPayments = eventPaymentType;
 	}
 
 	public String getVipPackagePrice() {
@@ -211,7 +212,13 @@ public class eventModel {
 		this.eventImage = eventImage;
 	}
 	
-	
+	public int getuserID() {
+		return userID;
+	}
+
+	public void setuserID(int userID) {
+		this.userID = userID;
+	}
 	
 	
 	

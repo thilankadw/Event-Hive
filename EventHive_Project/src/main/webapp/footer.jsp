@@ -6,7 +6,7 @@
             <input type="submit" value="Subscribe">
         </form>
         <div class="footer-navigations">
-            <a href="jsp/allevents.jsp">Home</a>
+            <a href="index.jsp">Home</a>
             <a href="createEvent.jsp">Create Events</a>
             <a href="#">About</a>
             <a href="#">Services</a>

@@ -1,17 +1,32 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+
+<%@ page import="java.sql.DriverManager"%>
+<%@ page import="java.sql.ResultSet"%>
+<%@ page import="java.sql.Statement"%>
+<%@ page import="java.sql.Connection"%>
+<%@ page import="java.sql.PreparedStatement"%>
+
+<%@ page import="jakarta.servlet.http.HttpServlet"%>
+
+<%@ page import="com.eventHive.utils.dbConnection"%>
+
+
 <%
-    //if (session.getAttribute("userSessionEmail") == null) {
-        //response.sendRedirect("../index.jsp");
-    //}
+	Connection connection = null;
+	Statement statement = null;
+	ResultSet resultSet = null; 
+	PreparedStatement preparedStatement = null;
 %>
+
 <!DOCTYPE html>
 <html>
   <head>
-    <title>EvenetHive - Create Event</title>
+    <title>EvenetHive - All Events</title>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/styles.css" />
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/allEvents.css" />
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/header.css" />
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/footer.css" />
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/eventCard.css" /> 
   </head>
   <body>
   
@@ -28,47 +43,47 @@
   			<div class="allevents-img">
   				<img src="${pageContext.request.contextPath}/assets/allevents/unsplash_ugaOk9LkmQY.png">
   			</div>
-  		</div>	
-  		
-  		<div class="upcoming-events-header">
-          <div class="upcoming-events-title">
-            <div class="upcoming-events-title-first">All</div>
-            <div class="upcoming-events-title-second">Events</div>
-          </div>
-          <div class="upcoming-events-filter">
-            <div class="upcoming-events-filter-dropdown">
-              <select name="" id="">
-                <option value="Wedding">Wedding</option>
-                <option value="Exhibition">Exhibition</option>
-                <option value="Meet up">Meet up</option>
-                <option value="Award Ceremony">Award Ceremony</option>
-              </select>
-            </div>
-            <div class="upcoming-events-filter-dropdown">
-              <select>
-                <% String[] ddistricts ={"Ampara", "Anuradhapura", "Badulla", "Batticaloa", "Colombo",
-										"Galle", "Gampaha", "Hambantota", "Jaffna", "Kalutara",
-										"Kandy", "Kegalle", "Kilinochchi", "Kurunegala", "Mannar",
-						 				"Matale", "Matara", "Monaragala", "Mullaitivu", "Nuwara Eliya",
-										"Polonnaruwa", "Puttalam", "Ratnapura", "Trincomalee", "Vavuniya"};
-											
-					for(String district : ddistricts) { %>
-					<option value="<%= district %>"><%= district %></option><% } %>
-              </select>
-            </div>
-            <div class="upcoming-events-filter-dropdown">
-              <input
-                type="date"
-                id="event-starting-date"
-                placeholder="select starting date"
-                class="upcoming-events-filter-date"
-              />
-            </div>
-          </div>
-        </div>
-  		
+  		</div>	  		
   	</div>
   	
+  	<div class="all-events-container">
+  		<div class="upcoming-events-center">
+        		<%
+					try {
+					    connection = dbConnection.getConnection();
+					    statement = connection.createStatement();
+					    String sql = "select * from events";
+					    preparedStatement = connection.prepareStatement(sql);
+					    resultSet = preparedStatement.executeQuery();
+					    while (resultSet.next()) {							
+					    	String eventTypeValue = "Happens PHYSICALLY!!!";
+							
+							if (resultSet.getString(11).equals("physical")) {
+								eventTypeValue = "Happens PHYSICALLY!!!";
+						    } else if (resultSet.getString(11).equals("online")) {
+						    	eventTypeValue = "ONLINE EVENT - Attend Anywhere!!!";
+						    } 		
+							    
+				%>
+					<jsp:include page="eventCard.jsp">
+						<jsp:param name="eventId" value="<%= resultSet.getString(1) %>" />
+						<jsp:param name="eventImage" value="<%= resultSet.getString(20) %>" />
+					    <jsp:param name="eventName" value="<%= resultSet.getString(2) %>" />
+					    <jsp:param name="eventDate" value="<%= resultSet.getString(9) %>" />
+						
+					    <jsp:param name="eventType" value="<%= eventTypeValue %>" />
+					</jsp:include>
+
+	        	<%
+						}
+						connection.close();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				%>		
+          
+    	</div>
+  	</div>
 
 	<%@ include file="footer.jsp" %>
     

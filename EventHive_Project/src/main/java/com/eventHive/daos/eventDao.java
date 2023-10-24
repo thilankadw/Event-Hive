@@ -1,5 +1,6 @@
 package com.eventHive.daos;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,15 +20,15 @@ public class eventDao {
 	private static Statement statement = null;
 	private static ResultSet resultSet = null;
 	private static String sql = null;
-	private static int resultSetInt;
+	private static int updatedRowCount;
 	static boolean isSuccess = false;
-	
+	 
 	public static int getNextID() {
 		int id = 0;
 		try {
 			connection = dbConnection.getConnection();
 			
-			String query = "SELECT movie_id FROM event ORDER BY id DESC LIMIT 1";		
+			String query = "SELECT eventID FROM events ORDER BY eventID DESC LIMIT 1";		
 			preparedStatement = connection.prepareStatement(query);
 	        rs = preparedStatement.executeQuery();
 			
@@ -41,30 +42,36 @@ public class eventDao {
 		return id+1;
 	}
 	
-	public static boolean createEvent(String eventName, String eventOrganization, String eventVenue, String eventDistrict, String eventCategory, String eventStartTime, String eventEndTime, String eventStartDate, String eventEndDate, String eventType, String eventPaymentType, String vipPackagePrice, String premiumPackagePrice, String standardPackagePrice, String eventRefundAvailable, String eventVisibility, String eventDescription, String maxParticipants, String imagePath) {
+	public static boolean createEvent(int eventID, String eventName, String eventOrganization, String eventLocation, String eventDistrict, String eventCategory, String eventStartTime, String eventEndTime, String eventStartDate, String eventEndDate, String eventType, String eventPayments, BigDecimal vipPackagePrice, BigDecimal premiumPackagePrice, BigDecimal standardPackagePrice, String eventRefundAvailable, String eventVisibility, String maxParticipants, String eventDescription,  String eventImage, int userID) {
 
 	    try {
 	    	connection = dbConnection.getConnection();
 	    	
-	    	String query = "INSERT INTO events (name, organization, venue, district, category, startdate, enddate, starttime, endtime, enddate, type, payments, visibility, maxparticipants, imglink, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	    	String query = "INSERT INTO events (eventID, eventName, eventOrganization, eventLocation, eventDistrict, eventCategory, eventStartTime, eventEndTime, eventStartDate, eventEndDate, eventType, eventPayments, vipPackagePrice, premiumPackagePrice, standardPackagePrice, eventRefundAvailable, eventVisibility, maxParticipants, eventDescription, eventImage, userID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	    	preparedStatement = connection.prepareStatement(query);
 	    	
-            preparedStatement.setString(1, eventName);
-            preparedStatement.setString(2, eventOrganization);
-            preparedStatement.setString(3, eventVenue);
-            preparedStatement.setString(4, eventDistrict);
-            preparedStatement.setString(5, eventCategory);
-            preparedStatement.setString(6, eventStartTime);
-            preparedStatement.setString(7, eventEndTime);
-            preparedStatement.setString(8, eventStartDate);
-            preparedStatement.setString(9, eventEndDate);
-            preparedStatement.setString(10, eventType);
-            preparedStatement.setString(11, eventPaymentType);         
-            preparedStatement.setString(16, eventVisibility);
-            preparedStatement.setString(17, maxParticipants);
-            preparedStatement.setString(19, imagePath);    
-            preparedStatement.setString(18, eventDescription);
-            
+	    	preparedStatement.setInt(1, eventID);
+            preparedStatement.setString(2, eventName);
+            preparedStatement.setString(3, eventOrganization);
+            preparedStatement.setString(4, eventLocation);
+            preparedStatement.setString(5, eventDistrict);
+            preparedStatement.setString(6, eventCategory);
+            preparedStatement.setString(7, eventStartTime);
+            preparedStatement.setString(8, eventEndTime);
+            preparedStatement.setString(9, eventStartDate);
+            preparedStatement.setString(10, eventEndDate);
+            preparedStatement.setString(11, eventType);
+            preparedStatement.setString(12, eventPayments);         
+            preparedStatement.setBigDecimal(13, vipPackagePrice);
+            preparedStatement.setBigDecimal(14, premiumPackagePrice);
+            preparedStatement.setBigDecimal(15, standardPackagePrice);    
+            preparedStatement.setString(16, eventRefundAvailable);
+            preparedStatement.setString(17, eventVisibility);
+            preparedStatement.setString(18, maxParticipants);
+            preparedStatement.setString(19, eventDescription);
+            preparedStatement.setString(20, eventImage);
+            preparedStatement.setInt(21, userID);
+             
 
 	        int rowsInserted = preparedStatement.executeUpdate();
 
@@ -121,7 +128,7 @@ public class eventDao {
 	            String eventDescription = resultSet.getString(11);
 	            String eventImage = resultSet.getString(12);
 
-	            newEvent = new eventModel(eventId, eventName, eventOrganization, eventVenue, eventDistrict, eventCategory, eventStartTime, eventEndTime, eventStartDate, eventEndDate, eventType, eventPaymentType, vipPackagePrice, premiumPackagePrice, standardPackagePrice, eventRefundAvailable, eventVisibility, maxParticipants, eventDescription, eventImage);
+	            newEvent = new eventModel(eventId, eventName, eventOrganization, eventVenue, eventDistrict, eventCategory, eventStartTime, eventEndTime, eventStartDate, eventEndDate, eventType, eventPaymentType, vipPackagePrice, premiumPackagePrice, standardPackagePrice, eventRefundAvailable, eventVisibility, maxParticipants, eventDescription, eventImage, eventId);
 
 	        }
 
@@ -132,39 +139,43 @@ public class eventDao {
 		return newEvent;   
 	}
 	
-	/*public static List<eventModel> getAllEvents() {
+	public static ArrayList<eventModel> getAllEvents() {
 		
 		ArrayList<eventModel> events = new ArrayList<>();
 	    
 	    try {
 	        connection = dbConnection.getConnection();
 	        statement = connection.createStatement();
-	        String sql = "select * from event"; // Assuming 'id' is the column name.
+	        String sql = "select * from events";
 	        resultSet = statement.executeQuery(sql);
 
 	        while (resultSet.next()) {
-	            int eventId = resultSet.getInt(1);
-	            String eventName = resultSet.getString(2);
-	            String eventOrganization = resultSet.getString(3);
-	            String eventVenue = resultSet.getString(4);
-	            String eventDistrict = resultSet.getString(5);
-	            String eventCategory = resultSet.getString(6);
-	            String eventStartTime = resultSet.getString(7);
-	            String eventEndTime = resultSet.getString(8);
-	            String eventStartDate = resultSet.getString(9);
-	            String eventEndDate = resultSet.getString(10);
-	            String eventType = resultSet.getString(11);
-	            String eventPaymentType = resultSet.getString(12);
-	            String vipPackagePrice = resultSet.getString(13);
-	            String premiumPackagePrice = resultSet.getString(14);
-	            String standardPackagePrice = resultSet.getString(15);
-	            String eventRefundAvailable = resultSet.getString(8);
-	            String eventVisibility = resultSet.getString(9);
-	            String maxParticipants = resultSet.getString(10);
-	            String eventDescription = resultSet.getString(11);
-	            String eventImage = resultSet.getString(12);
+	            int eventID = resultSet.getInt("eventId");
+	            String eventName = resultSet.getString("eventName");
+	            String eventOrganization = resultSet.getString("eventOrganization");
+	            String eventLocation = resultSet.getString("eventLocation");
+	            String eventDistrict = resultSet.getString("eventDistrict");
+	            String eventCategory = resultSet.getString("eventCategory");
+	            String eventStartTime = resultSet.getString("eventStartTime");
+	            String eventEndTime = resultSet.getString("eventEndTime");
+	            String eventStartDate = resultSet.getString("eventStartDate");
+	            String eventEndDate = resultSet.getString("eventEndDate");
+	            String eventType = resultSet.getString("eventType");
+	            String eventPayments = resultSet.getString("eventPayments");
+	            String vipPackagePrice = resultSet.getString("vipPackagePrice");
+	            String premiumPackagePrice = resultSet.getString("premiumPackagePrice");
+	            String standardPackagePrice = resultSet.getString("standardPackagePrice");
+	            String eventRefundAvailable = resultSet.getString("eventRefundAvailable");
+	            String eventVisibility = resultSet.getString("eventVisibility");
+	            String maxParticipants = resultSet.getString("maxParticipants");
+	            String eventDescription = resultSet.getString("eventDescription");
+	            String eventImage = resultSet.getString("eventImage");
+	            int userID = resultSet.getInt("userId");
 
-	            eventModel newEvent = new eventModel(eventId, eventName, eventOrganization, eventVenue, eventDistrict, eventCategory, eventStartTime, eventEndTime, eventStartDate, eventEndDate, eventType, eventPaymentType, vipPackagePrice, premiumPackagePrice, standardPackagePrice, eventRefundAvailable, eventVisibility, maxParticipants, eventDescription, eventImage);
+	            eventModel newEvent = new eventModel (eventID, eventName, eventOrganization, eventLocation, eventDistrict, eventCategory, 
+	        			eventStartTime, eventEndTime, eventStartDate, eventEndDate, eventType, eventPayments, 
+	        			vipPackagePrice, premiumPackagePrice, standardPackagePrice, eventRefundAvailable, eventVisibility,
+	        			maxParticipants, eventDescription, eventImage, userID);
 
 	            events.add(newEvent);
 	        }
@@ -173,15 +184,15 @@ public class eventDao {
 	        e.printStackTrace();
 	    }
 	    
-		return Event;   
-	}*/
+		return events;   
+	}
 
 	public static boolean updateEventName(int eventID, String eventName) {
 	    
 	    try {
 	        connection = dbConnection.getConnection();
 	        
-	        String query = "UPDATE event SET name = ? WHERE id = ?";
+	        String query = "UPDATE events SET eventName = ? WHERE eventId = ?";
 	        preparedStatement = connection.prepareStatement(query);
 	        
 	        preparedStatement.setString(1, eventName);
@@ -202,7 +213,7 @@ public class eventDao {
 	    try {
 	        connection = dbConnection.getConnection();
 	        
-	        String query = "UPDATE event SET organization = ? WHERE id = ?";
+	        String query = "UPDATE events SET eventOrganization = ? WHERE eventId = ?";
 	        preparedStatement = connection.prepareStatement(query);
 	        
 	        preparedStatement.setString(1, eventOrganization);
@@ -218,15 +229,15 @@ public class eventDao {
 	    
 	}
 	
-	public static boolean updateEventVenue(int eventID, String eventVenue) {
+	public static boolean updateEventLocation(int eventID, String eventLocation) {
 	    
 	    try {
 	        connection = dbConnection.getConnection();
 	        
-	        String query = "UPDATE event SET organization = ? WHERE id = ?";
+	        String query = "UPDATE events SET eventLocation = ? WHERE eventId = ?";
 	        preparedStatement = connection.prepareStatement(query);
 	        
-	        preparedStatement.setString(1, eventVenue);
+	        preparedStatement.setString(1, eventLocation);
 	        preparedStatement.setInt(2, eventID);
 	        
 	        int updatedRows = preparedStatement.executeUpdate();
@@ -236,7 +247,7 @@ public class eventDao {
 	        e.printStackTrace();
 	    }
 	    return isSuccess;
-	    
+	   
 	}
 	
 	public static boolean updateEventDistrict(int eventID, String eventDistrict) {
@@ -244,7 +255,7 @@ public class eventDao {
 	    try {
 	        connection = dbConnection.getConnection();
 	        
-	        String query = "UPDATE event SET organization = ? WHERE id = ?";
+	        String query = "UPDATE events SET eventDistrict = ? WHERE eventId = ?";
 	        preparedStatement = connection.prepareStatement(query);
 	        
 	        preparedStatement.setString(1, eventDistrict);
@@ -265,7 +276,7 @@ public class eventDao {
 	    try {
 	        connection = dbConnection.getConnection();
 	        
-	        String query = "UPDATE event SET organization = ? WHERE id = ?";
+	        String query = "UPDATE events SET eventCategory = ? WHERE eventId = ?";
 	        preparedStatement = connection.prepareStatement(query);
 	        
 	        preparedStatement.setString(1, eventCategory);
@@ -286,7 +297,7 @@ public class eventDao {
 	    try {
 	        connection = dbConnection.getConnection();
 	        
-	        String query = "UPDATE event SET organization = ? WHERE id = ?";
+	        String query = "UPDATE events SET eventStartTime = ? WHERE eventId = ?";
 	        preparedStatement = connection.prepareStatement(query);
 	        
 	        preparedStatement.setString(1, eventStartTime);
@@ -307,7 +318,7 @@ public class eventDao {
 	    try {
 	        connection = dbConnection.getConnection();
 	        
-	        String query = "UPDATE event SET organization = ? WHERE id = ?";
+	        String query = "UPDATE events SET eventEndTime = ? WHERE eventId = ?";
 	        preparedStatement = connection.prepareStatement(query);
 	        
 	        preparedStatement.setString(1, eventEndTime);
@@ -328,7 +339,7 @@ public class eventDao {
 	    try {
 	        connection = dbConnection.getConnection();
 	        
-	        String query = "UPDATE event SET organization = ? WHERE id = ?";
+	        String query = "UPDATE events SET eventStartDate = ? WHERE eventId = ?";
 	        preparedStatement = connection.prepareStatement(query);
 	        
 	        preparedStatement.setString(1, eventStartDate);
@@ -349,7 +360,7 @@ public class eventDao {
 	    try {
 	        connection = dbConnection.getConnection();
 	        
-	        String query = "UPDATE event SET organization = ? WHERE id = ?";
+	        String query = "UPDATE events SET eventEndDate = ? WHERE eventId = ?";
 	        preparedStatement = connection.prepareStatement(query);
 	        
 	        preparedStatement.setString(1, eventEndDate);
@@ -365,12 +376,12 @@ public class eventDao {
 	    
 	}
 
-	public static void deleteEvent(int eventID) {
+	public static boolean  deleteEvent(int eventID) {
 		
 	    try {
 	        connection = dbConnection.getConnection();
 	        
-	        String query = "DELETE FROM event WHERE id = ?";
+	        String query = "DELETE FROM events WHERE eventId = ?";
 	        preparedStatement = connection.prepareStatement(query);
 	        
 	        preparedStatement.setInt(1, eventID);
@@ -381,6 +392,7 @@ public class eventDao {
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    }
+		return isSuccess;
 	    
 	}
 

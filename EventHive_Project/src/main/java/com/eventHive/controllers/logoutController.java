@@ -19,11 +19,10 @@ public class logoutController extends HttpServlet {
 			HttpSession session = request.getSession(false);
 			if(session!=null) {
 				session.removeAttribute("userSessionEmail");
-			    session.removeAttribute("sessionRole");
-			    session.getMaxInactiveInterval();
+			    session.removeAttribute("userSessionId");
+			    session.removeAttribute("userSessionRole");
 			}
-		    
-		    
+		  	    
 		    RequestDispatcher requestdispatcher = request.getRequestDispatcher("index.jsp");
 			requestdispatcher.forward(request, response);
 			

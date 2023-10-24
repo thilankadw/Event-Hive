@@ -6,21 +6,23 @@
         </div>
         <div class="nav-links-container">
           <a href="${pageContext.request.contextPath}/index.jsp" class="navitems">Home</a>
-          <a href="${pageContext.request.contextPath}/adminDashboard.jsp" class="navitems">Events</a>
+          <a href="${pageContext.request.contextPath}/allEvents.jsp" class="navitems">Events</a>
           <a href="${pageContext.request.contextPath}/createEvent.jsp" class="navitems">Create Events</a>
-          <a href="${pageContext.request.contextPath}/userProfile.jsp" class="navitems">About</a>
+          <a href="${pageContext.request.contextPath}/about.jsp" class="navitems">About</a>
         </div>
         <div class="user-account">
         	<%
-			    if (session.getAttribute("userSessionEmail") == null) { %>
-			    	<button id="loginbtn">Sign in</button>
-			        <button id="signupbtn">Sign up</button>
-			    <% }else { 
-			    %>
-			    	<a href="${pageContext.request.contextPath}/userProfile.jsp" id="logoutbtn"><img src="${pageContext.request.contextPath}/assets/header/profilepage.png" alt="Profile" id="profile-page-icon" /></a>
-			    <% }
-				//System.out.println(session.getAttribute("userSessionEmail"));
+        		
+				if (session.getAttribute("userSessionEmail") == null) { %>
+				    <button id="loginbtn">Sign in</button>
+				    <button id="signupbtn">Sign up</button>
+				<% } else if (session.getAttribute("userSessionRole") != null && session.getAttribute("userSessionRole").equals("admin")) { %>
+				    <a href="${pageContext.request.contextPath}/adminDashboard.jsp" id="logoutbtn">Admin</a>
+				<% } else { %>
+				    <a href="${pageContext.request.contextPath}/userProfile.jsp?userId=<%= session.getAttribute("userSessionId") %>" id="logoutbtn"><img src="${pageContext.request.contextPath}/assets/header/profilepage.png" alt="Profile" id="profile-page-icon" /></a>
+				<% } 
 			%>
+
           
         </div>
       </div>

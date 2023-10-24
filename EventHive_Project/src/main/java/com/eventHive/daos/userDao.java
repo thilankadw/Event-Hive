@@ -23,11 +23,12 @@ public class userDao {
 	    try {
 	    	connection = dbConnection.getConnection();
 	        
-	        String query = "SELECT password FROM user WHERE email = ?";
+	        String query = "SELECT userPassword FROM users WHERE userEmail = ?";
 	        preparedStatement = connection.prepareStatement(query);
+	        preparedStatement.setString(1, userEmail);
 	        rs = preparedStatement.executeQuery();
 	        if (rs.next()) {
-	            userPassword = rs.getString("password");
+	            userPassword = rs.getString("userPassword");
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace();
@@ -50,13 +51,48 @@ public class userDao {
 	    return userPassword;
 	}
 	
+	public static String getUserRole(String userEmail) {
+		
+	    String userRole = null;
+	    
+	    try {
+	    	connection = dbConnection.getConnection();
+	        
+	        String query = "SELECT userRole FROM users WHERE userEmail = ?";
+	        preparedStatement = connection.prepareStatement(query);
+	        preparedStatement.setString(1, userEmail);
+	        rs = preparedStatement.executeQuery();
+	        if (rs.next()) {
+	        	userRole = rs.getString("userRole");
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    } finally {
+	        // Close resources in reverse order of their creation
+	        try {
+	            if (rs != null) {
+	                rs.close();
+	            }
+	            if (preparedStatement != null) {
+	                preparedStatement.close();
+	            }
+	            if (connection != null) {
+	            	connection.close();
+	            }
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
+	    return userRole;
+	}
+	
 	//get the next available user id
 	public static int getNextID() {
 		int id = 0;
 		try {
 			connection = dbConnection.getConnection();
 			
-			String query = "SELECT movie_id FROM event ORDER BY id DESC LIMIT 1";		
+			String query = "SELECT userId FROM users ORDER BY userId DESC LIMIT 1";		
 			preparedStatement = connection.prepareStatement(query);
 	        rs = preparedStatement.executeQuery();
 			
@@ -76,7 +112,7 @@ public class userDao {
 	    try {
 	    	connection = dbConnection.getConnection();
 	        
-	        String query = "SELECT * FROM user WHERE email = ?";
+	        String query = "SELECT * FROM users WHERE userEmail = ?";
 	        
 	        preparedStatement = connection.prepareStatement(query);
 	        preparedStatement.setString(1, userEmail);
@@ -108,16 +144,17 @@ public class userDao {
 	}
 	
 	//user registration function
-	public static boolean createUserRecord(String userName, String userEmail, String userPassword) {
+	public static boolean createUserRecord(int userId, String userName, String userEmail, String userPassword) {
 		
 	    try {
 	    	connection = dbConnection.getConnection();
 	    	
-	        String query = "INSERT INTO user (name, email, password) VALUES (?, ?, ?)";
+	        String query = "INSERT INTO users (userId, userName, userEmail, userPassword) VALUES (?, ?, ?, ?)";
 	        preparedStatement = connection.prepareStatement(query);
-	        preparedStatement.setString(1, userName);
-	        preparedStatement.setString(2, userEmail);
-	        preparedStatement.setString(3, userPassword);
+	        preparedStatement.setInt(1, userId);
+	        preparedStatement.setString(2, userName);
+	        preparedStatement.setString(3, userEmail);
+	        preparedStatement.setString(4, userPassword);
 
 	        int rowsInserted = preparedStatement.executeUpdate();
 
@@ -147,7 +184,7 @@ public class userDao {
 	    try {
 	    	connection = dbConnection.getConnection();
 	    	
-	        String query = "INSERT INTO user (id, name, email, password, role) VALUES (?, ?, ?, ?, ?)";
+	        String query = "INSERT INTO users (userId, userName, userEmail, userPassword, userRole) VALUES (?, ?, ?, ?, ?)";
 	        preparedStatement = connection.prepareStatement(query);
 	        preparedStatement.setInt(1, userId);
 	        preparedStatement.setString(2, userName);
@@ -176,14 +213,82 @@ public class userDao {
 	    }
 	    return isSuccess;
 	}
-	
+	public static int getUserIdFromName(String userName) {
+		
+		int userId = 0;
+	    
+	    try {
+	    	connection = dbConnection.getConnection();
+	        
+	        String query = "SELECT userId FROM users WHERE userName = ?";
+	        preparedStatement = connection.prepareStatement(query);
+	        preparedStatement.setString(1, userName);
+	        rs = preparedStatement.executeQuery();
+	        if (rs.next()) {
+	        	userId = rs.getInt("userId");
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    } finally {
+	        // Close resources in reverse order of their creation
+	        try {
+	            if (rs != null) {
+	                rs.close();
+	            }
+	            if (preparedStatement != null) {
+	                preparedStatement.close();
+	            }
+	            if (connection != null) {
+	            	connection.close();
+	            }
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
+	    return userId;
+	    
+	}
+	public static int getUserIdFromEmail(String userEmail) {
+		int userId = 0;
+	    
+	    try {
+	    	connection = dbConnection.getConnection();
+	        
+	        String query = "SELECT userId FROM users WHERE userEmail = ?";
+	        preparedStatement = connection.prepareStatement(query);
+	        preparedStatement.setString(1, userEmail);
+	        rs = preparedStatement.executeQuery();
+	        if (rs.next()) {
+	        	userId = rs.getInt("userId");
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    } finally {
+	        // Close resources in reverse order of their creation
+	        try {
+	            if (rs != null) {
+	                rs.close();
+	            }
+	            if (preparedStatement != null) {
+	                preparedStatement.close();
+	            }
+	            if (connection != null) {
+	            	connection.close();
+	            }
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
+	    return userId;
+	    
+	}
 	//delete user function for admin
-	public static void deleteUser(int userID) {
+	public static boolean deleteUser(int userID) {
 		
 	    try {
 	        connection = dbConnection.getConnection();
 	        
-	        String query = "DELETE FROM user WHERE id = ?";
+	        String query = "DELETE FROM users WHERE userId = ?";
 	        preparedStatement = connection.prepareStatement(query);       
 	        preparedStatement.setInt(1, userID);
 	        
@@ -193,6 +298,7 @@ public class userDao {
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    }
+	    return isSuccess;
 	    
 	}
 

@@ -1,13 +1,30 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%
-    //if (session.getAttribute("userSessionEmail") == null) {
-        //response.sendRedirect("../index.jsp");
-    //}
+    if (session.getAttribute("userSessionEmail") == null) {
+        response.sendRedirect("index.jsp");
+    }
 %>
+
+<%@ page import="java.sql.DriverManager"%>
+<%@ page import="java.sql.ResultSet"%>
+<%@ page import="java.sql.Statement"%>
+<%@ page import="java.sql.Connection"%>
+<%@ page import="java.sql.PreparedStatement"%>
+
+<%@ page import="jakarta.servlet.http.HttpServlet"%>
+
+<%@ page import="com.eventHive.utils.dbConnection"%>
+<%
+	Connection connection = null;
+	Statement statement = null;
+	ResultSet resultSet = null; 
+	PreparedStatement preparedStatement = null;
+%>
+
 <!DOCTYPE html>
 <html>
   <head>
-    <title>EvenetHive - Create Event</title>
+    <title>EvenetHive - Ticket Booking</title>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/styles.css" />
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/ticketbooking.css" />
     <!--  <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/header.css" />-->
@@ -15,30 +32,68 @@
   </head>
   <body>
   
+  <% 	
+  		String eventId = request.getParameter("eventId");
+  	
+	  	connection = dbConnection.getConnection();
+	    statement = connection.createStatement();
+	    String sql = "select * from events where eventId ="+eventId;
+	    preparedStatement = connection.prepareStatement(sql);
+	    resultSet = preparedStatement.executeQuery();
+  	
+	    while (resultSet.next()) {	
+  %>
+  
+  
   <div class="ticket-booking-page">
   
-  	<div class="ticket-booking-header"><a href="${pageContext.request.contextPath}/eventDetails.jsp">Back To Event</a></div>
+  	
+  	<div class="ticket-booking-header"><a href="${pageContext.request.contextPath}/eventDetails.jsp?eventId=<%= eventId %>">Back To Event</a></div>
   	
   	<form action="ticketController" method="post">
   
+  	<input type="hidden" name="eventid" value="<%= eventId %>">
+  	
   	<div class="ticket-booking-title">Book Your Tickets</div>
   	
   	<div class="event-name">Asia Cup 2023</div>
   	<div class="event-organization">by Pakistan Cricket Board</div>
-  	<div class="event-date">Wednesday, August 30 2023, 2.30PM</div>
+  	
+  	<%
+	  	String dateStr = resultSet.getString(9);
+		
+	    java.text.SimpleDateFormat dateFormat = new java.text.SimpleDateFormat("yyyy-MM-dd");
+	    java.util.Date date = dateFormat.parse(dateStr);
+	
+	    java.util.Calendar calendar = java.util.Calendar.getInstance();
+	    calendar.setTime(date);
+	
+	    int year = calendar.get(java.util.Calendar.YEAR);
+	    int month = calendar.get(java.util.Calendar.MONTH);
+	    int day = calendar.get(java.util.Calendar.DAY_OF_MONTH);
+	    
+	    // Get day name
+	    java.text.DateFormatSymbols dfs = new java.text.DateFormatSymbols(java.util.Locale.getDefault());
+	    String dayName = dfs.getWeekdays()[calendar.get(java.util.Calendar.DAY_OF_WEEK)];
+	    
+	    // Get month name
+	    String monthName = dfs.getMonths()[month];		    
+	%>
+					
+  	<div class="event-date"><%= dayName %> , <%= day %> <%= monthName%> <%= year %></div>
   	
   	<div class="event-type-selection">
   		<button class="event-type-block" id="vip" onclick="updateAmount(event, 'vip')">
   			<div class="ticket-type">VIP</div>
-  			<input class="ticket-price" value="2500" name="vip" readonly/>
+  			<input type="hidden" class="ticket-price" value="<%= resultSet.getString(13) %>" name="vip" readonly/>
   		</button>
   		<button class="event-type-block" id="premium" onclick="updateAmount(event, 'premium')">
   			<div class="ticket-type">Premium</div>
-  			<input class="ticket-price" value="1500" name="premium" readonly/>
+  			<input type="hidden"  class="ticket-price" value="<%= resultSet.getString(14) %>" name="premium" readonly/>
   		</button>
   		<button class="event-type-block" id="standard" onclick="updateAmount(event, 'standard')">
   			<div class="ticket-type">Standard</div>
-  			<input class="ticket-price" value="1000" name="standard" readonly/>
+  			<input type="hidden"  class="ticket-price" value="<%= resultSet.getString(15) %>" name="standard" readonly/>
   		</button>
   	</div>
   	
@@ -58,33 +113,34 @@
   	</div>
   	
   	<div class="payment-type-selection">
-  		<input type="button" class="payment-type-btn" id="pay-with-card-btn" value="Pay with Card">
-  		<input type="button" class="payment-type-btn" id="pay-at-event-btn" value="Pay at Event">
+  		<input type="button" class="payment-type-btn" id="pay-with-card-btn" value="Pay With Card" name="payment-type">
+  		<input type="button" class="payment-type-btn" id="pay-at-event-btn" value="Pay At Event" name="payment-type">
   	</div>
   	
   	<div class="credit-card-details" id="credit-card-details" style="display: none;">
   		<div class="contact-details">
-  			<input type="text" placeholder="Name">
-  			<input type="text" placeholder="Email Address">
+  			<input type="text" placeholder="Name" name="name">
+  			<input type="text" placeholder="Email Address" name="email">
   		</div>
   		<div class="card-details">
   			<div>
-  				<input type="text" placeholder="Card Number">
-  				<input type="text" placeholder="Name on Card">
+  				<input type="text" placeholder="Card Number" name="card_number">
+  				<input type="text" placeholder="Name on Card" name="card_name">
   			</div>
   			<div>
-  				<input type="text" placeholder="Expire date">
-  				<input type="text" placeholder="CVV">
+  				<input type="text" placeholder="Expire date" name="card_exp_date">
+  				<input type="text" placeholder="CVV" name="card_cvv">
   			</div>
   		</div>
   	</div>
   	
-  	<input type="submit" value="Confirm Booking" class="confirm-booking-active">
+  	<input type="submit" value="Confirm Booking" class="confirm-booking-active" name="book_ticket_btn">
   	
   	</form>
   	
   </div>
   
+  <% } %>
   
 	<script src="${pageContext.request.contextPath}/scripts/ticketBooking.js"></script>
 
