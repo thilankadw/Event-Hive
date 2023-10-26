@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%
-    //if (session.getAttribute("userSessionEmail") == null || session.getAttribute("userSessionId") == null) {
-        //response.sendRedirect("index.jsp");
-    //}
+    if (session.getAttribute("userSessionEmail") == null || session.getAttribute("userSessionId") == null) {
+        response.sendRedirect("index.jsp");
+    }
 %>
 
 <%@ page import="java.sql.DriverManager"%>
@@ -20,8 +20,8 @@
 	ResultSet resultSet = null; 
 	PreparedStatement preparedStatement = null;
 	
-	String eventId = request.getParameter("eventId");						
-	int userId = (Integer) session.getAttribute("userSessionId");
+	String userIdStr = request.getParameter("userId");	
+	int userId = Integer.parseInt(userIdStr);
 %>
 
 <!DOCTYPE html>
@@ -49,7 +49,8 @@
 		
 			<div id="userprofile-dashboard">
 				<div class="userprofile-header">
-					<div>Discover and<br>experience<br>extraordinary Events.</div>
+					<div class="user-pro-img-text">Discover and<br>experience<br>extraordinary Events.</div>
+					<img src="${pageContext.request.contextPath}/assets/profile/proimg2.jpg" class="user-pfo-img"/>				
 				</div>
 				
 				<div class="dashboard-showcase">
@@ -105,7 +106,8 @@
 			
 			<div id="userprofile-events">
 				<div class="userprofile-header">
-					<div>Discover and<br>experience<br>extraordinary Events.</div>
+					<div class="user-pro-img-text">Discover and<br>experience<br>extraordinary Events.</div>
+					<img src="${pageContext.request.contextPath}/assets/profile/proimg2.jpg" class="user-pfo-img"/>				
 				</div>
 				
 				<div class="userprofile-events-container">
@@ -149,7 +151,8 @@
 			
 			<div id="userprofile-bookings">
 				<div class="userprofile-header">
-					<div>Discover and<br>experience<br>extraordinary Events.</div>
+					<div class="user-pro-img-text">Discover and<br>experience<br>extraordinary Events.</div>
+					<img src="${pageContext.request.contextPath}/assets/profile/proimg2.jpg" class="user-pfo-img"/>				
 				</div>
 				
 				<div class="userprofile-booking-container">
@@ -187,7 +190,8 @@
 			
 			<div id="userprofile-profile">
 				<div class="userprofile-header">
-					<div>Discover and<br>experience<br>extraordinary Events.</div>
+					<div class="user-pro-img-text">Discover and<br>experience<br>extraordinary Events.</div>
+					<img src="${pageContext.request.contextPath}/assets/profile/proimg2.jpg" class="user-pfo-img"/>				
 				</div>
 				
 				<div class="userprofile-logout">
@@ -201,7 +205,7 @@
 					<div class="admin-managge-users-container">
 					<div class="userprofile-portfolio-title">Reset Password</div>					
 						<div>
-							<form action="adminController" method="post" class="adminadduers-form">
+							<form action="userController" method="post" class="adminadduers-form">
 								<div class="admin-addusers-inputs" id="admin_add_user_name">
 									<div class="admin-addusers-inputs-label">Current Password</div>		
 									<input type="text" name="cur_password" id="cur_password" class="admin-section-add-user-input-fields">						
@@ -215,7 +219,7 @@
 									<input type="text" name="new_password_confirm" id="new_password_confirm" class="admin-section-add-user-input-fields">						
 								</div>
 								<div class="admin-addusers-inputs">
-									<input type="submit" name="admin-add-user-btn" value="Reset Password" class="admin-section-adduser-submitbtn">				
+									<input type="submit" name="reset-password" value="Reset Password" class="admin-section-adduser-submitbtn">				
 								</div>
 							</form>
 						</div>

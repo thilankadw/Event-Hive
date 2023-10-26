@@ -375,6 +375,27 @@ public class eventDao {
 	    return isSuccess;
 	    
 	}
+	
+	public static boolean updateEventImage(int eventID, String eventImage) {
+	    
+	    try {
+	        connection = dbConnection.getConnection();
+	        
+	        String query = "UPDATE events SET eventImage = ? WHERE eventId = ?";
+	        preparedStatement = connection.prepareStatement(query);
+	        
+	        preparedStatement.setString(1, eventImage);
+	        preparedStatement.setInt(2, eventID);
+	        
+	        int updatedRows = preparedStatement.executeUpdate();
+	        isSuccess = updatedRows > 0;
+	        
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return isSuccess;
+	    
+	}
 
 	public static boolean  deleteEvent(int eventID) {
 		

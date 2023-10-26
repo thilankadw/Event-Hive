@@ -33,7 +33,7 @@ public class loginController extends HttpServlet {
 			session.setAttribute("userSessionRole", userRole);
 			int userID = (int) session.getAttribute("userSessionId");
 			System.out.println("userID : "+session.getAttribute("userSessionRole"));
-			RequestDispatcher dis = request.getRequestDispatcher("createEvent.jsp");
+			RequestDispatcher dis = request.getRequestDispatcher("index.jsp");
 			dis.forward(request, response);
 		}else {
 			RequestDispatcher dis = request.getRequestDispatcher("index.jsp");

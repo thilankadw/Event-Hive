@@ -84,4 +84,14 @@
     <servlet-name>logoutController</servlet-name>
     <url-pattern>/logoutController</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>inquiryController</display-name>
+    <servlet-name>inquiryController</servlet-name>
+    <servlet-class>com.eventHive.controllers.inquiryController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>inquiryController</servlet-name>
+    <url-pattern>/inquiryController</url-pattern>
+  </servlet-mapping>
 </web-app>

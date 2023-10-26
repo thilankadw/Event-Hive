@@ -82,7 +82,7 @@ public class ticketDao {
 	    
 	    try {
 	        connection = dbConnection.getConnection();
-	        String query = "select count(noOfTickets) from tickets where userId="+userId+"and eventId="+eventId;
+	        String query = "select sum(noOfTickets) from tickets where userId="+userId+"and eventId="+eventId;
 	        preparedStatement = connection.prepareStatement(query);
 	        rs = preparedStatement.executeQuery();
 	        
@@ -134,6 +134,23 @@ public class ticketDao {
 			String query = "delete from tickets where ticketId = ?";
 			preparedStatement = connection.prepareStatement(query);
 			preparedStatement.setInt(1, ticketId);
+			
+			int updatedRows = preparedStatement.executeUpdate();  
+	        isSuccess = updatedRows > 0;
+	        
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return isSuccess;
+	}
+	
+	public static boolean updateTicketCount(int ticketId, int noOfTickets) {
+		try {
+			connection = dbConnection.getConnection();
+			String query = "update tickets set noOfTickets = ? where ticketId = ?";
+			preparedStatement = connection.prepareStatement(query);
+			preparedStatement.setInt(1, noOfTickets);
+			preparedStatement.setInt(2, ticketId);
 			
 			int updatedRows = preparedStatement.executeUpdate();  
 	        isSuccess = updatedRows > 0;

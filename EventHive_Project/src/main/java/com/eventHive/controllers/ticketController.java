@@ -25,8 +25,18 @@ public class ticketController extends HttpServlet {
 		
 		HttpSession session = request.getSession();
 		int userId = (int) session.getAttribute("userSessionId");
-		int eventId = Integer.parseInt(request.getParameter("eventid"));
-		int noOfTickets = Integer.parseInt(request.getParameter("no-of-tickets"));
+		
+		String eventIdStr = request.getParameter("eventid");
+		int eventId = 0;
+		if(!eventIdStr.isEmpty()) {
+			eventId	= Integer.parseInt(eventIdStr);
+		}
+		
+		String noOfTicketsStr = request.getParameter("no-of-tickets");
+		int noOfTickets = 0;
+		if(!noOfTicketsStr.isEmpty()) {
+			noOfTickets = Integer.parseInt(noOfTicketsStr);
+		}
 		String finalAmountStr = request.getParameter("amount");
 		String paymentType = request.getParameter("payment-type");
 		String name = request.getParameter("name");
@@ -52,7 +62,7 @@ public class ticketController extends HttpServlet {
 		if(request.getParameter("book_ticket_btn") != null) {
 			try {	
 				if(ticketDao.createTickets(ticketDao.getNextID(), userId, eventId, noOfTickets, finalAmount, paymentType)) {
-					RequestDispatcher dis = request.getRequestDispatcher("adminDashboard.jsp");
+					RequestDispatcher dis = request.getRequestDispatcher("userProfile.jsp?userId="+userId);
 					dis.forward(request, response);
 				}else {
 					RequestDispatcher dis = request.getRequestDispatcher("index.jsp");
@@ -64,7 +74,7 @@ public class ticketController extends HttpServlet {
 		}else if(request.getParameter("remove_ticket-btn") != null) {
 			try {
 				if(ticketDao.deleteTicket(ticketId)) {
-					RequestDispatcher dis = request.getRequestDispatcher("adminDashboard.jsp");
+					RequestDispatcher dis = request.getRequestDispatcher("userProfile.jsp?userId="+userId);
 					dis.forward(request, response);
 				}else {
 					RequestDispatcher dis = request.getRequestDispatcher("index.jsp");
@@ -74,6 +84,20 @@ public class ticketController extends HttpServlet {
 				e.printStackTrace();
 			}
 			
+		}else if (request.getParameter("update_book_ticket_btn") != null) {
+		    try {
+		        if (ticketDao.updateTicketCount(ticketId, noOfTickets)) {
+		            // Ticket count updated successfully, you can redirect the user to their profile or any other appropriate page.
+		            RequestDispatcher dis = request.getRequestDispatcher("userProfile.jsp?userId=" + userId);
+		            dis.forward(request, response);
+		        } else {
+		            // Handle the case where the ticket count update fails, e.g., show an error message.
+		            RequestDispatcher dis = request.getRequestDispatcher("index.jsp");
+		            dis.forward(request, response);
+		        }
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		    }
 		}
 		
 	}

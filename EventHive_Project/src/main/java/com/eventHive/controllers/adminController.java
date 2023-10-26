@@ -75,6 +75,28 @@ public class adminController extends HttpServlet {
 				RequestDispatcher dis = request.getRequestDispatcher("index.jsp");
 				dis.forward(request, response);	
 			}
+		}else if(request.getParameter("admin-update-user-role") != null) {
+			if(!userEmail.isEmpty()) {
+				int userId = userDao.getUserIdFromEmail(userEmail);
+				
+				if(userDao.updateUserRole(userId, userRole)) {
+					RequestDispatcher dis = request.getRequestDispatcher("adminDashboard.jsp");
+					dis.forward(request, response);
+				}else {
+					RequestDispatcher dis = request.getRequestDispatcher("index.jsp");
+					dis.forward(request, response);	
+				}
+			}else if(!userName.isEmpty()) {
+				int userId = userDao.getUserIdFromName(userName);
+				
+				if(userDao.updateUserRole(userId, userRole)) {
+					RequestDispatcher dis = request.getRequestDispatcher("adminDashboard.jsp");
+					dis.forward(request, response);
+				}else {
+					RequestDispatcher dis = request.getRequestDispatcher("index.jsp");
+					dis.forward(request, response);	
+				}
+			}
 		}
 		
 		

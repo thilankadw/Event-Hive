@@ -6,11 +6,10 @@
             <input type="submit" value="Subscribe">
         </form>
         <div class="footer-navigations">
-            <a href="index.jsp">Home</a>
-            <a href="createEvent.jsp">Create Events</a>
-            <a href="#">About</a>
-            <a href="#">Services</a>
-            <a href="#">Policies</a>
+            <a href="${pageContext.request.contextPath}/index.jsp">Home</a>
+            <a href="${pageContext.request.contextPath}/createEvent.jsp">Create Events</a>
+            <a href="${pageContext.request.contextPath}/about.jsp">About</a>
+            <a href="${pageContext.request.contextPath}/inquiry.jsp">Inquiry</a>
         </div>
         <div class="footer-hori-line"></div>
         <div class="footer-footer">

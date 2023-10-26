@@ -17,7 +17,7 @@ public class userDao {
 
 	//return a user's password based on email(for login)
 	public static String getUserPassword(String userEmail) {
-		
+		System.out.println("gpw");
 	    String userPassword = null;
 	    
 	    try {
@@ -282,6 +282,41 @@ public class userDao {
 	    return userId;
 	    
 	}
+	public static String getUserEmailFromId(int userId) {
+	    System.out.println("em");
+	    String userEmail = "";
+	    
+	    try {
+	        connection = dbConnection.getConnection();
+	        
+	        String query = "SELECT userEmail FROM users WHERE userId = ?";
+	        preparedStatement = connection.prepareStatement(query);
+	        preparedStatement.setInt(1, userId);
+	        rs = preparedStatement.executeQuery();
+	        if (rs.next()) {
+	            userEmail = rs.getString("userEmail"); // Assign the retrieved email to userEmail
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    } finally {
+	        // Close resources in reverse order of their creation
+	        try {
+	            if (rs != null) {
+	                rs.close();
+	            }
+	            if (preparedStatement != null) {
+	                preparedStatement.close();
+	            }
+	            if (connection != null) {
+	                connection.close();
+	            }
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
+	    return userEmail;
+	}
+
 	//delete user function for admin
 	public static boolean deleteUser(int userID) {
 		
@@ -291,6 +326,50 @@ public class userDao {
 	        String query = "DELETE FROM users WHERE userId = ?";
 	        preparedStatement = connection.prepareStatement(query);       
 	        preparedStatement.setInt(1, userID);
+	        
+	        int updatedRows = preparedStatement.executeUpdate();  
+	        isSuccess = updatedRows > 0;
+	        
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return isSuccess;
+	    
+	}
+	
+	public static boolean updateUserRole(int userID, String userRole) {
+		
+	    try {
+	        connection = dbConnection.getConnection();
+	        
+	        String query = "update users set userRole = ? WHERE userId = ?";
+	        preparedStatement = connection.prepareStatement(query);
+
+	        preparedStatement.setString(1, userRole); // Set the userRole first
+	        preparedStatement.setInt(2, userID);     // Set the userID second
+
+	        
+	        int updatedRows = preparedStatement.executeUpdate();  
+	        isSuccess = updatedRows > 0;
+	        
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return isSuccess;
+	    
+	}
+	
+	public static boolean updateUserPassword(int userID, String userPassword) {
+		System.out.println("pw");
+	    try {
+	        connection = dbConnection.getConnection();
+	        
+	        String query = "update users set userPassword = ? WHERE userId = ?";
+	        preparedStatement = connection.prepareStatement(query);
+
+	        preparedStatement.setString(1, userPassword); // Set the userRole first
+	        preparedStatement.setInt(2, userID);     // Set the userID second
+
 	        
 	        int updatedRows = preparedStatement.executeUpdate();  
 	        isSuccess = updatedRows > 0;

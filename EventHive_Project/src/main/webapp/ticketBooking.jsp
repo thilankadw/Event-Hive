@@ -14,6 +14,8 @@
 <%@ page import="jakarta.servlet.http.HttpServlet"%>
 
 <%@ page import="com.eventHive.utils.dbConnection"%>
+ 
+<%@ page import="com.eventHive.daos.ticketDao"%>
 <%
 	Connection connection = null;
 	Statement statement = null;
@@ -56,8 +58,8 @@
   	
   	<div class="ticket-booking-title">Book Your Tickets</div>
   	
-  	<div class="event-name">Asia Cup 2023</div>
-  	<div class="event-organization">by Pakistan Cricket Board</div>
+  	<div class="event-name"><%= resultSet.getString("eventName") %></div>
+  	<div class="event-organization">by <%= resultSet.getString("eventOrganization") %></div>
   	
   	<%
 	  	String dateStr = resultSet.getString(9);
@@ -85,23 +87,49 @@
   	<div class="event-type-selection">
   		<button class="event-type-block" id="vip" onclick="updateAmount(event, 'vip')">
   			<div class="ticket-type">VIP</div>
+  			<input type="hidden" class="ticket-price" value="vip" name="vipName" readonly/>
   			<input type="hidden" class="ticket-price" value="<%= resultSet.getString(13) %>" name="vip" readonly/>
   		</button>
   		<button class="event-type-block" id="premium" onclick="updateAmount(event, 'premium')">
   			<div class="ticket-type">Premium</div>
+  			<input type="hidden" class="ticket-price" value="premium" name="premiumName" readonly/>
   			<input type="hidden"  class="ticket-price" value="<%= resultSet.getString(14) %>" name="premium" readonly/>
   		</button>
   		<button class="event-type-block" id="standard" onclick="updateAmount(event, 'standard')">
   			<div class="ticket-type">Standard</div>
+  			<input type="hidden" class="ticket-price" value="standard" name="standardName" readonly/>
   			<input type="hidden"  class="ticket-price" value="<%= resultSet.getString(15) %>" name="standard" readonly/>
   		</button>
   	</div>
   	
+  	<% 
+	    String userId = session.getAttribute("userSessionId").toString(); // Get the user's ID from the session
+	    String eventId2 = request.getParameter("eventId");
+		int ticketCount = 0;
+	    int availableTicketCount = 5;
+	    boolean earlyTickets = false;
+	    int ticketId = 1;
+		connection = dbConnection.getConnection();
+        String query = "SELECT ticketId, count(noOfTickets) FROM tickets WHERE userId = ? AND eventId = ? GROUP BY ticketId";
+        preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, userId); // Set the user ID parameter
+        preparedStatement.setString(2, eventId2); // Assuming eventId is defined somewhere
+
+        resultSet = preparedStatement.executeQuery();
+
+        while (resultSet.next()) {
+        	ticketId = resultSet.getInt(1);
+            ticketCount = resultSet.getInt(2);
+        }
+        if(ticketCount>0){
+        	earlyTickets =  true;
+        }
+	%>
   	<div class="number-of-tickets-section">
   		<div class="number-of-tickets-label">Number of Tickets</div>
   		<div class="">
   			<button class="ticket-number-decrease" id="ticket-number-decrease" onclick="decrease(event)">-</button>
-  			<input type="number" class="no-of-tickets" value="1" max="5" min="1" name="no-of-tickets" id="no-of-tickets" readonly>
+  			<input type="number" class="no-of-tickets" value="1" max="<%= 5 - ticketCount %>" min="1" name="no-of-tickets" id="no-of-tickets" readonly>
   			<button class="ticket-number-increase" id="ticket-number-increase" onclick="increase(event)">+</button>
   		</div>
   	</div>
@@ -133,8 +161,11 @@
   			</div>
   		</div>
   	</div>
-  	
-  	<input type="submit" value="Confirm Booking" class="confirm-booking-active" name="book_ticket_btn">
+  	<%
+	    String nameAttribute = (earlyTickets) ? "update_book_ticket_btn" : "book_ticket_btn";
+	%>
+	<input type="hidden" name="ticketId" value="<%= ticketId%>">
+	<input type="submit" value="Confirm Booking" class="confirm-booking-active" name="<%= nameAttribute %>">
   	
   	</form>
   	

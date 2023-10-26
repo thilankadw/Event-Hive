@@ -78,8 +78,8 @@
   					<form class="event-banner-update-form" method="post" action="eventController" enctype="multipart/form-data">
   						<div class="event-details-header-dates-title">Add New Banner</div>
   						<div>
-  							<input type="file" class="update-banner">
-  							<input type="submit" value="update" class="update-event-details-submitbtn">
+  							<input type="file" class="update-banner" name="event_image">
+  							<input type="submit" value="update" name="update-event-banner-btn" class="update-event-details-submitbtn">
   						</div>
   					</form>
   					<div class="event-details-header-day" style="display: none;">Wednesday, August 30 2023, 2.30PM</div>

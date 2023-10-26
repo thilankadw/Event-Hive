@@ -50,6 +50,7 @@
 			<div id="userprofile-dashboard">
 				<div class="userprofile-header">
 					<div>Discover and<br>experience<br>extraordinary Events.</div>
+					<img src="${pageContext.request.contextPath}/assets/profile/admin.jpg" class="user-admin-img"/>
 				</div>
 				
 				<div class="dashboard-showcase">
@@ -90,6 +91,7 @@
 			<div id="userprofile-events">
 				<div class="userprofile-header">
 					<div>Discover and<br>experience<br>extraordinary Events.</div>
+					<img src="${pageContext.request.contextPath}/assets/profile/admin.jpg" class="user-admin-img"/>
 				</div>
 				
 				<div class="userprofile-events-container">
@@ -133,6 +135,7 @@
 			<div id="userprofile-bookings">
 				<div class="userprofile-header">
 					<div>Discover and<br>experience<br>extraordinary Events.</div>
+					<img src="${pageContext.request.contextPath}/assets/profile/admin.jpg" class="user-admin-img"/>
 				</div>
 				
 				<div class="userprofile-booking-container">
@@ -170,6 +173,7 @@
 			<div id="userprofile-profile">
 				<div class="userprofile-header">
 					<div>Discover and<br>experience<br>extraordinary Events.</div>
+					<img src="${pageContext.request.contextPath}/assets/profile/admin.jpg" class="user-admin-img"/>	
 				</div>
 				<div class="userprofile-logout">
 					<form action="logoutController"  method="post">
@@ -210,7 +214,7 @@
 				<div class="admin-managge-users-container">
 					<div class="userprofile-portfolio-title">Delete Users</div>					
 						<div>
-							<form class="adminadduers-form">
+							<form action="adminController" class="adminadduers-form" method="post">
 								<div class="admin-addusers-inputs">
 									<div class="admin-addusers-inputs-label">User Name</div>		
 									<input type="text" name="user_name" class="admin-section-add-user-input-fields">						
@@ -221,6 +225,33 @@
 								</div>
 								<div class="admin-addusers-inputs">
 									<input type="submit" value="Delete User" class="admin-section-adduser-submitbtn" name="admin_delete_user">				
+								</div>
+							</form>
+						</div>
+				</div>
+				
+				<div class="admin-managge-users-container">
+					<div class="userprofile-portfolio-title">Update User Role</div>					
+						<div>
+							<form action="adminController" method="post" class="adminadduers-form">
+								<div class="admin-addusers-inputs" id="admin_add_user_name">
+									<div class="admin-addusers-inputs-label">User Name</div>		
+									<input type="text" name="user_name" class="admin-section-add-user-input-fields">						
+								</div>
+								<div class="admin-addusers-inputs">
+									<div class="admin-addusers-inputs-label">User Email</div>		
+									<input type="text" name="user_email" class="admin-section-add-user-input-fields">						
+								</div>
+								<div class="admin-addusers-inputs">
+									<div class="admin-addusers-inputs-label">User Role</div>	
+									<select name="user_role" class="admin-section-add-user-input-fields" class="admin-adduser-user-role">
+										<option>user</option>
+										<option>sysadmin</option>
+										<option>admin</option>
+									</select>				
+								</div> 
+								<div class="admin-addusers-inputs">
+									<input type="submit" name="admin-update-user-role" value="Add User" class="admin-section-adduser-submitbtn">				
 								</div>
 							</form>
 						</div>
